@@ -10,7 +10,7 @@
 "use strict";
 
 import { strictEqual, deepStrictEqual } from "assert";
-import * as tc2005b from "../js/tc2005b.js";
+import * as tc2005b from "../videojuegos/tc2005b_Emi.js";
 
 
 describe("TC2005B Module Tests", () => {
@@ -139,7 +139,7 @@ describe("TC2005B Module Tests", () => {
                 "Mexico Is Magnificent");
         });
     });
-/*
+
     describe("mcd", () => {
         it("zeros", () => {
             strictEqual(tc2005b.mcd(0, 0), 0);
@@ -173,6 +173,7 @@ describe("TC2005B Module Tests", () => {
         });
     });
 
+    
     describe("factorize", () => {
         it("factorize 0", () => {
             deepStrictEqual(tc2005b.factorize(0), []);
@@ -350,5 +351,5 @@ describe("TC2005B Module Tests", () => {
             deepStrictEqual(tc2005b.sortDescending([15, 12, 9, 6, 3]), [15, 12, 9, 6, 3]);
         });
     });
-*/
+
 });
