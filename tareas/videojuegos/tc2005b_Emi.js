@@ -73,6 +73,13 @@ function invertArrayInplace(arr){
 
 function capitalize(str){
     let new_arr = "";
+    let size = str.length;
+    new_arr = new_arr + str.charAt(0).toUpperCase();
+    for(let i = 1; i < size; i++){
+        if(str.charAt(i) == " "){
+            new_arr = new_arr + str.charAt(i+1);
+        }
+    }
     return new_str;
 }
 

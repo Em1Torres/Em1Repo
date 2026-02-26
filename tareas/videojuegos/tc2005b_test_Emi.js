@@ -107,7 +107,7 @@ describe("TC2005B Module Tests", () => {
             deepStrictEqual(test, [15, 12, 9, 6, 3]);
         });
     });
-/*
+
     describe("capitalize", () => {
         it("empty string", () => {
             strictEqual(tc2005b.capitalize(""), "");
@@ -139,7 +139,7 @@ describe("TC2005B Module Tests", () => {
                 "Mexico Is Magnificent");
         });
     });
-
+/*
     describe("mcd", () => {
         it("zeros", () => {
             strictEqual(tc2005b.mcd(0, 0), 0);
