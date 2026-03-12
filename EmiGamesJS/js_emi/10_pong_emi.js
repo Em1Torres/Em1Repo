@@ -21,18 +21,44 @@ let game;
 let oldTime = 0;
 
 let playerSpeed = 0.5;
-let ballSpeed = 0.5;
+let ballSpeed = 0.1;
 
 // Class for the game ball
 class Ball extends GameObject{
     constructor(position,width,height,color,sheetCols){
         super(position, width, height, color, "paddle", sheetCols);
-        this.velocity = new Vector(ballSpeed,ballSpeed);
+        this.velocity = new Vector(-ballSpeed,-ballSpeed);
     }
 
     update(deltaTime){
         this.velocity = this.velocity.normalize().times(ballSpeed);
         this.position = this.position.plus(this.velocity.times(deltaTime));
+        this.clampWithinCanvas();
+
+    }
+    clampWithinCanvas() {
+        // Top border
+        if (this.position.y - this.halfSize.y < 0) {
+            this.velocity.y = this.velocity.y*-1;
+        // Left border
+        }
+        if (this.position.x - this.halfSize.x < 0) {
+            this.position.x = canvasWidth/2;
+            this.position.y = canvasHeight/2;
+            this.velocity.x = ballSpeed;
+            this.velocity.y = ballSpeed;
+        // Bottom border
+        }
+        if (this.position.y + this.halfSize.y > canvasHeight) {
+            this.velocity.y = this.velocity.y*-1;
+        // Right border
+        }
+        if (this.position.x + this.halfSize.x > canvasWidth) {
+            this.position.x = canvasWidth/2;
+            this.position.y = canvasHeight/2;
+            this.velocity.x = ballSpeed;
+            this.velocity.y = ballSpeed;
+        }
     }
 }
 
@@ -109,7 +135,7 @@ class Game {
     initObjects() {
         // Add another object to draw a background
         this.background = new GameObject(new Vector(canvasWidth / 2, canvasHeight / 2), canvasWidth, canvasHeight);
-        this.background.setSprite("../assets/sprites/trak2_plate2b.png");
+        this.background.setSprite("../assets_emi/sprites/trak2_plate2b.png");
 
         this.player = new Player(new Vector(50, canvasHeight / 2), 50, 200, "red");
         this.player2 = new Player(new Vector(canvasWidth-50, canvasHeight / 2), 50, 200, "blue");
@@ -118,9 +144,8 @@ class Game {
         this.ball = new Ball(new Vector(canvasWidth/2, canvasHeight/2),20,20, "green");
 
         this.actors = [];
-        for (let i=0; i<10; i++) {
-            this.addBox();
-        }
+        this.actors.push(this.player);
+        this.actors.push(this.player2);
     }
 
     draw(ctx) {
@@ -141,31 +166,40 @@ class Game {
         this.player2.update(deltaTime);
         this.ball.update(deltaTime);
 
-        // Check collision against other objects
-        for (let actor of this.actors) {
-            if (boxOverlap(this.player, actor)) {
-                //actor.color = "yellow";
-                actor.setSprite("../assets/sprites/RTS_Crate_red.png")
-            } else {
-                //actor.color = "grey";
-                actor.setSprite("../assets/sprites/RTS_Crate.png")
+        for(let actor of this.actors){
+            if(boxOverlap(this.ball,actor)){
+                this.ball.velocity.x = this.ball.velocity.x * -1;
+            }
+            else{
+                this.ball.velocity.x = this.ball.velocity.x;
             }
         }
+
+        // Check collision against other objects
+        // for (let actor of this.actors) {
+        //     if (boxOverlap(this.player, actor)) {
+        //         //actor.color = "yellow";
+        //         actor.setSprite("../assets_emi/sprites/RTS_Crate_red.png")
+        //     } else {
+        //         //actor.color = "grey";
+        //         actor.setSprite("../assets_emi/sprites/RTS_Crate.png")
+        //     }
+        // }
     }
 
-    addBox() {
-        // TODO: Use the randomRange function to make these values different
-        // Create boxes with minimum size 50, and up to 50 pixels more
-        const size = randomRange(50, 50);
-        // Define a random position for the box, within the canvas
-        const posX = randomRange(canvasWidth);
-        const posY = randomRange(canvasHeight);
-        const box = new GameObject(new Vector(posX, posY), size, size, "grey");
-        box.setSprite("../assets/sprites/RTS_Crate.png")
-        // Set a property to indicate if the box should be destroyed or not
-        box.destroy = false;
-        this.actors.push(box);
-    }
+    // addBox() {
+    //     // TODO: Use the randomRange function to make these values different
+    //     // Create boxes with minimum size 50, and up to 50 pixels more
+    //     const size = randomRange(50, 50);
+    //     // Define a random position for the box, within the canvas
+    //     const posX = randomRange(canvasWidth);
+    //     const posY = randomRange(canvasHeight);
+    //     const box = new GameObject(new Vector(posX, posY), size, size, "grey");
+    //     box.setSprite("../assets_emi/sprites/RTS_Crate.png")
+    //     // Set a property to indicate if the box should be destroyed or not
+    //     box.destroy = false;
+    //     this.actors.push(box);
+    // }
 
     createEventListeners() {
         window.addEventListener('keydown', (event) => {
