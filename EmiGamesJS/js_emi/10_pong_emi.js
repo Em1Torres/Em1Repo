@@ -20,44 +20,35 @@ let game;
 // Variable to store the time at the previous frame
 let oldTime = 0;
 
-let playerSpeed = 0.5;
-let ballSpeed = 0.1;
+let playerSpeed = 0.1
+
 
 // Class for the game ball
 class Ball extends GameObject{
     constructor(position,width,height,color,sheetCols){
         super(position, width, height, color, "paddle", sheetCols);
-        this.velocity = new Vector(-ballSpeed,-ballSpeed);
+        this.velocity = new Vector(0,0);
     }
 
     update(deltaTime){
-        this.velocity = this.velocity.normalize().times(ballSpeed);
-        this.position = this.position.plus(this.velocity.times(deltaTime));
-        this.clampWithinCanvas();
+        this.position = this.position.plus(this.velocity.times(deltaTime/1000));
+        
+    }
+
+    reset(){
+        this.position = new Vector(canvasWidth/2, canvasHeight/2);
+        this.velocity = new Vector(0,0);
 
     }
-    clampWithinCanvas() {
-        // Top border
-        if (this.position.y - this.halfSize.y < 0) {
-            this.velocity.y = this.velocity.y*-1;
-        // Left border
-        }
-        if (this.position.x - this.halfSize.x < 0) {
-            this.position.x = canvasWidth/2;
-            this.position.y = canvasHeight/2;
-            this.velocity.x = ballSpeed;
-            this.velocity.y = ballSpeed;
-        // Bottom border
-        }
-        if (this.position.y + this.halfSize.y > canvasHeight) {
-            this.velocity.y = this.velocity.y*-1;
-        // Right border
-        }
-        if (this.position.x + this.halfSize.x > canvasWidth) {
-            this.position.x = canvasWidth/2;
-            this.position.y = canvasHeight/2;
-            this.velocity.x = ballSpeed;
-            this.velocity.y = ballSpeed;
+
+    serve(){
+        let angle = Math.random() * Math.PI / 2 - (Math.PI/4);
+        let speed = 275;
+        this.velocity.x = Math.cos(angle)*speed;
+        this.velocity.y = Math.sin(angle)*speed;
+
+        if(Math.random() > 0.5){
+            this.velocity = this.velocity.times(-1);
         }
     }
 }
@@ -97,8 +88,6 @@ class Player extends GameObject {
         }
         // TODO: Normalize the velocity to avoid greater speed on diagonals
 
-        this.velocity = this.velocity.normalize().times(playerSpeed);
-
         this.position = this.position.plus(this.velocity.times(deltaTime));
 
         this.clampWithinCanvas();
@@ -130,6 +119,9 @@ class Game {
     constructor() {
         this.createEventListeners();
         this.initObjects();
+
+        this.pointsRight = 0;
+        this.pointsLeft = 0;
     }
 
     initObjects() {
@@ -141,22 +133,30 @@ class Game {
         this.player2 = new Player(new Vector(canvasWidth-50, canvasHeight / 2), 50, 200, "blue");
         //this.player.setSprite("../assets/sprites/blordrough_quartermaster-NESW.png.", new Rect( 48,64*2,48,64));
 
-        this.ball = new Ball(new Vector(canvasWidth/2, canvasHeight/2),20,20, "green");
+        this.ball = new Ball(new Vector(canvasWidth/2, canvasHeight/2),30,30, "green");
 
-        this.actors = [];
-        this.actors.push(this.player);
-        this.actors.push(this.player2);
+        this.goalLeft = new GameObject(new Vector(0, canvasHeight/2),20,canvasHeight,"purple");
+        this.goalRight = new GameObject(new Vector(canvasWidth, canvasHeight/2),20,canvasHeight,"purple");
+
+        this.upperWall = new GameObject(new Vector(canvasWidth/2, 0),canvasWidth,20,"yellow");
+        this.lowerWall = new GameObject(new Vector(canvasWidth/2, canvasHeight),canvasWidth,20,"yellow");
+
+        this.pointsTextLeft = new TextLabel(canvasWidth/4,80,"50px Ubuntu Mono","white");
+        this.pointsTextRight = new TextLabel(canvasWidth/4*3,80,"50px Ubuntu Mono","white");
+
     }
 
     draw(ctx) {
         // Draw the background first, so everything else is drawn on top
         this.background.draw(ctx);
-
-        for (let actor of this.actors) {
-            actor.draw(ctx);
-        }
         this.player.draw(ctx);
         this.player2.draw(ctx);
+        this.goalLeft.draw(ctx);
+        this.goalRight.draw(ctx);
+        this.pointsTextLeft.draw(ctx, this.pointsLeft);
+        this.pointsTextRight.draw(ctx, this.pointsRight);
+        this.upperWall.draw(ctx);
+        this.lowerWall.draw(ctx);
         this.ball.draw(ctx);
     }
 
@@ -166,14 +166,42 @@ class Game {
         this.player2.update(deltaTime);
         this.ball.update(deltaTime);
 
-        for(let actor of this.actors){
-            if(boxOverlap(this.ball,actor)){
-                this.ball.velocity.x = this.ball.velocity.x * -1;
-            }
-            else{
-                this.ball.velocity.x = this.ball.velocity.x;
-            }
+        if(boxOverlap(this.ball,this.player)){
+                this.ball.velocity.x = this.ball.velocity.x*-1;
+                this.ball.velocity = this.ball.velocity.times(1.1);
         }
+
+        if(boxOverlap(this.ball,this.player2)){
+                this.ball.velocity.x = this.ball.velocity.x*-1;
+                this.ball.velocity = this.ball.velocity.times(1.1);
+        }
+
+        if(boxOverlap(this.ball,this.goalLeft)){
+                this.pointsRight = this.pointsRight + 1;
+                this.ball.reset();
+        }
+
+        if(boxOverlap(this.ball,this.goalRight)){
+                this.pointsLeft = this.pointsLeft + 1;
+                this.ball.reset();
+                
+        }
+
+        if(boxOverlap(this.ball,this.upperWall)){
+                this.ball.velocity.y = this.ball.velocity.y*-1;
+                this.ball.velocity = this.ball.velocity.times(1.1);
+        }
+
+        if(boxOverlap(this.ball,this.lowerWall)){
+                this.ball.velocity.y = this.ball.velocity.y*-1;
+                this.ball.velocity = this.ball.velocity.times(1.1);
+        }
+
+        
+
+        
+            
+        
 
         // Check collision against other objects
         // for (let actor of this.actors) {
@@ -211,6 +239,12 @@ class Game {
                 this.addKey('up',this.player2);
             } else if (event.key == 'l') {
                 this.addKey('down', this.player2);
+            }
+
+            if(event.key == " "){
+                if(this.ball.velocity.x == 0 && this.ball.velocity.y == 0){
+                    this.ball.serve();
+                }
             }
         });
 

@@ -129,14 +129,13 @@ class Game {
     }
 
     addBox() {
-        // TODO: Use the randomRange function to make these values different
-        // Create boxes with minimum size 50, and up to 50 pixels more
+        
         const size = randomRange(50, 50);
-        // Define a random position for the box, within the canvas
+        
         const posX = randomRange(canvasWidth);
         const posY = randomRange(canvasHeight);
         const box = new GameObject(new Vector(posX, posY), size, size, "grey");
-        // Set a property to indicate if the box should be destroyed or not
+        
         box.destroy = false;
         this.actors.push(box);
     }
