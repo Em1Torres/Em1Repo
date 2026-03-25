@@ -35,6 +35,20 @@ function boxOverlap(obj1, obj2) {
     return (L1 < R2 && R1 > L2 && T1 < B2 && B1 > T2);
 }
 
+function hitSurfacePaddle(obj1,obj2){
+    const L1 = obj1.position.x - obj1.halfSize.x;
+    const R1 = obj1.position.x + obj1.halfSize.x;
+    const T1 = obj1.position.y - obj1.halfSize.y;
+    const B1 = obj1.position.y + obj1.halfSize.y;
+
+    const L2 = obj2.position.x - obj2.halfSize.x;
+    const R2 = obj2.position.x + obj2.halfSize.x;
+    const T2 = obj2.position.y - obj2.halfSize.y;
+    const B2 = obj2.position.y + obj2.halfSize.y;
+    
+    return (L2 < L1 < R1 < R2);
+}
+
 /*
  * Generate a random integer in the range [start, start + size - 1]
  *

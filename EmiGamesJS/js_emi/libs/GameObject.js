@@ -150,3 +150,19 @@ class GameObject {
 
     }
 }
+
+class hitPointGameObject extends GameObject{
+    constructor(position, width, height, color, type, hitPoints) {
+        super(position, width, height, color, type);
+        this.hitPoints = hitPoints;
+    }
+
+    damage(){
+        this.hitPoints = this.hitPoints-1;
+        if(this.hitPoints < 0){
+            this.hitPoints = 0;
+        }
+        
+    }
+
+}

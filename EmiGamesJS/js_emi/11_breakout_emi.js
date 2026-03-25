@@ -42,15 +42,11 @@ class Ball extends GameObject{
     }
 
     serve(){
-        let angle = Math.random() * ( Math.PI);
-        let speed = 275;
+        let angle = Math.random() * ( Math.PI/2) + (Math.PI/4);
+        let speed = 300;
         this.velocity.x = Math.cos(angle)*speed;
-        this.velocity.y = Math.sin(angle)*speed;
-
-        
-        
-        this.velocity.x = this.velocity.x *-1;
-        
+        this.velocity.y = -Math.sin(angle)*speed;
+        console.log(angle);
     }
 }
 
@@ -122,7 +118,14 @@ class Game {
         this.initObjects();
 
         this.hitPoints = 3;
+        this.gameWon = false;
+        this.levelCount = 1;
+        this.level2Active = false;
+        this.level3Active = false;
         this.gameOverDipslay = 'GAME OVER: Type 1 to restart';
+        this.gameWonDisplay = 'GAME WON: Type 1 to restart';
+        this.level2Display = 'Level 2: Type 2 to continue';
+        this.level3Display = 'Level 3: Type 3 to continue';
     }
 
     initObjects() {
@@ -130,7 +133,7 @@ class Game {
         this.background = new GameObject(new Vector(canvasWidth / 2, canvasHeight / 2), canvasWidth, canvasHeight);
         this.background.setSprite("../assets_emi/sprites/trak2_plate2b.png");
 
-        this.player = new Player(new Vector( canvasWidth / 2, canvasHeight-50), 125, 12.5, "red");
+        this.player = new Player(new Vector( canvasWidth / 2, canvasHeight-50), 125, 10, "red");
         
         //this.player.setSprite("../assets/sprites/blordrough_quartermaster-NESW.png.", new Rect( 48,64*2,48,64));
 
@@ -147,23 +150,61 @@ class Game {
         //Game Over Backgroound
         this.gameOver_background = new GameObject(new Vector(canvasWidth / 2, canvasHeight / 2), canvasWidth, canvasHeight);
         this.gameOver_background.setSprite("../assets_emi/sprites/lava_spr_strip45.png");
-        this.gameOverText = new TextLabel(10,canvasHeight/2,"60px Ubuntu Mono","black");
         
+
+        //Game won  Background
+        this.gameWonBackground = new GameObject(new Vector(canvasWidth / 2, canvasHeight / 2), canvasWidth, canvasHeight, "cyan");
+
+        //Level 2 background
+        this.level2Background = new GameObject(new Vector(canvasWidth / 2, canvasHeight / 2), canvasWidth, canvasHeight, "orange");
+
+        //Level 3 background
+        this.level3Background =  new GameObject(new Vector(canvasWidth / 2, canvasHeight / 2), canvasWidth, canvasHeight, "pink");
+        
+        this.gameText = new TextLabel(10,canvasHeight/2,"60px Ubuntu Mono","black");
+
+        //Generate crates
+        this.addGrid(canvasHeight/3);
+        
+    }
+
+    addGrid(rows){
         this.actors = [];
-        for(let i = 0; i < canvasHeight - canvasHeight/3; i = i+canvasHeight/6){
+        for(let i = 0; i < rows; i = i+canvasHeight/6){
             for(let j = 0; j < canvasWidth -20; j = j+canvasWidth/8){
-                let crate = new GameObject(new Vector(j+20, i+20),60, 20,"grey");
+                let crateHitPoints;
+                if(Math.random() > 0.5){
+                    crateHitPoints = 2;
+                }
+                else{
+                    crateHitPoints = 1;
+                }
+                let crate = new hitPointGameObject(new Vector(j+20, i+10),60, 20,"grey",crateHitPoints);
                 crate.setSprite("../assets_emi/sprites/RTS_Crate.png");
                 this.actors.push(crate);
             }
-        }
-
-        
-       
+        } 
     }
 
     draw(ctx) {
-        if(this.hitPoints > 0){
+        if(this.actors.length == 0 && this.levelCount == 3){
+            this.gameWonBackground.draw(ctx);
+            this.gameText.draw(ctx,this.gameWonDisplay);
+            this.gameWon = true;
+        }
+        else if(this.actors.length == 0 && this.levelCount == 2){
+            this.level3Background.draw(ctx);
+            this.gameText.draw(ctx,this.level3Display);
+            this.level3Active = true;
+        }
+        else if(this.actors.length == 0){
+            this.level2Background.draw(ctx);
+            this.gameText.draw(ctx,this.level2Display);
+            this.level2Active = true;
+        
+        }
+        else if(this.hitPoints > 0){
+            
             // Draw the background first, so everything else is drawn on top
             this.background.draw(ctx);
 
@@ -191,7 +232,7 @@ class Game {
         }
         else{
             this.gameOver_background.draw(ctx);
-            this.gameOverText.draw(ctx,this.gameOverDipslay);
+            this.gameText.draw(ctx,this.gameOverDipslay);
         }
 
         
@@ -203,25 +244,29 @@ class Game {
         
         this.ball.update(deltaTime);
 
-        if(boxOverlap(this.ball,this.player)){
+        if(boxOverlap(this.ball,this.player) && hitSurfacePaddle(this.ball,this.player)){
                 this.ball.velocity.y = this.ball.velocity.y*-1;
-                this.ball.velocity = this.ball.velocity.times(1.1);
+                this.ball.velocity = this.ball.velocity.times(1.05);
+        }
+        else if(boxOverlap(this.ball, this.player) && !hitSurfacePaddle(this.ball,this.player)){
+            this.ball.velocity.x = this.ball.velocity.x * -1;
+            this.ball.velocity = this.ball.velocity.times(1.05);
         }
 
         if(boxOverlap(this.ball,this.goalLeft)){
                 this.ball.velocity.x = this.ball.velocity.x*-1;
-                this.ball.velocity = this.ball.velocity.times(1.1);
+                this.ball.velocity = this.ball.velocity.times(1.05);
         }
 
         if(boxOverlap(this.ball,this.goalRight)){
                 this.ball.velocity.x = this.ball.velocity.x*-1;
-                this.ball.velocity = this.ball.velocity.times(1.1);
+                this.ball.velocity = this.ball.velocity.times(1.05);
                 
         }
 
         if(boxOverlap(this.ball,this.upperWall)){
                 this.ball.velocity.y = this.ball.velocity.y*-1;
-                this.ball.velocity = this.ball.velocity.times(1.1);
+                this.ball.velocity = this.ball.velocity.times(1.05);
         }
 
         if(boxOverlap(this.ball,this.lowerWall)){
@@ -230,9 +275,26 @@ class Game {
         }
 
         for(let i = 0; i < this.actors.length;i++){
-            if(boxOverlap(this.ball,this.actors[i])){
+            if(boxOverlap(this.ball,this.actors[i]) && hitSurfacePaddle(this.ball,this.actors[i])){
                 this.ball.velocity.y *= -1;
-                this.actors.splice(i, 1);
+                this.actors[i].damage();
+                if(this.actors[i].hitPoints == 0){
+                    this.actors.splice(i,1);
+                }
+                else if(this.actors[i].hitPoints == 1){
+                    this.actors[i].setSprite("../assets_emi/sprites/RTS_Crate_red.png");
+                }
+                break;
+            }
+            else if(boxOverlap(this.ball,this.actors[i]) && !hitSurfacePaddle(this.ball,this.actors[i])){
+                this.ball.velocity.x *= -1;
+                this.actors[i].damage();
+                if(this.actors[i].hitPoints == 0){
+                    this.actors.splice(i,1);
+                }
+                else if(this.actors[i].hitPoints == 1){
+                    this.actors[i].setSprite("../assets_emi/sprites/RTS_Crate_red.png");
+                }
                 break;
             }
         }
@@ -270,7 +332,34 @@ class Game {
 
     createEventListeners() {
         window.addEventListener('keydown', (event) => {
-            if(this.hitPoints > 0){
+            if(this.gameWon){
+                if(event.key == '1'){
+                    this.hitPoints = 3;
+                    this.gameWon = false;
+                    this.levelCount = 1;
+                    this.ball.reset();
+                    this.addGrid(canvasHeight/3);
+                }
+            }
+            else if(this.level3Active){
+                if(event.key == '3'){
+                    this.hitPoints = 3;
+                    this.level3Active = false;
+                    this.levelCount = this.levelCount + 1;
+                    this.ball.reset();
+                    this.addGrid(canvasHeight - canvasHeight/3);
+                }
+            }
+            else if(this.level2Active){
+                if(event.key == '2'){
+                    this.hitPoints = 3;
+                    this.level2Active = false;
+                    this.levelCount = this.levelCount + 1;
+                    this.ball.reset();
+                    this.addGrid(canvasHeight/2);
+                }
+            }
+            else if(this.hitPoints > 0){
                 if (event.key == 'a') {
                     this.addKey('left',this.player);
                 } else if (event.key == 'd') {
@@ -285,6 +374,8 @@ class Game {
             else{
                 if(event.key == '1'){
                     this.hitPoints = 3;
+                    this.levelCount = 1; 
+                    this.addGrid(canvasHeight/3);
                 }
             }
 
