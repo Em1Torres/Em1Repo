@@ -31,7 +31,7 @@ class Ball extends GameObject{
     }
 
     update(deltaTime){
-        this.position = this.position.plus(this.velocity.times(deltaTime/1000));
+        this.position = this.position.plus(this.velocity.times(deltaTime/1000));   //Dividimos deltaTime para pasar a segundos y que la velocidad no sea demasiada
         
     }
 
@@ -40,13 +40,12 @@ class Ball extends GameObject{
         this.velocity = new Vector(0,0);
 
     }
-
     serve(){
-        let angle = Math.random() * ( Math.PI/2) + (Math.PI/4);
-        let speed = 300;
-        this.velocity.x = Math.cos(angle)*speed;
-        this.velocity.y = -Math.sin(angle)*speed;
-        console.log(angle);
+        let angle = Math.random() * ( Math.PI/2) + (Math.PI/4);  //Genera un angulo random del lanzamiento de la pelota
+        let speed = 300; //multiplicamos por un factor más grande ya que está en segundos el tiempo
+        this.velocity.x = Math.cos(angle)*speed;  //velocidad en x, mangitud * coseno
+        this.velocity.y = -Math.sin(angle)*speed; //velocidad en y, magnitud * seno
+        
     }
 }
 
@@ -110,6 +109,25 @@ class Player extends GameObject {
     }
 }
 
+//Básicamente hice herencia de GameObject y hace lo mismo pero tiene un atributo extra de 
+// contador de vida y un método para poder reducir el contador de vida
+class hitPointGameObject extends GameObject{
+    constructor(position, width, height, color, type, hitPoints) { //El nuevo constructor recibirá un atributo extra
+        super(position, width, height, color, type);  //Llamamos constructor de GameObject
+        this.hitPoints = hitPoints;  //Definimos atributo extra
+    }
+
+    //Metodo para hacerle daño
+    damage(){
+        this.hitPoints = this.hitPoints-1;  //reduces 1
+        if(this.hitPoints < 0){  //Asegurarnos que el valor del contador no sea menor de 0
+            this.hitPoints = 0;
+        }
+        
+    }
+
+}
+
 
 // Class to keep track of all the events and objects in the game
 class Game {
@@ -117,13 +135,13 @@ class Game {
         this.createEventListeners();
         this.initObjects();
 
-        this.hitPoints = 3;
-        this.gameWon = false;
-        this.levelCount = 1;
-        this.level2Active = false;
-        this.level3Active = false;
+        this.hitPoints = 3;  //Vida del jugador
+        this.gameWon = false;  //Boolean para checar si ya pasó la pantalla de gameWon
+        this.levelCount = 1; //Contador de niveles
+        this.level2Active = false; //Boolean para checar si ya pasó la pantalla de level 2
+        this.level3Active = false; //Boolean para checar si ya pasó la pantalla de level 3
         this.gameOverDipslay = 'GAME OVER: Type 1 to restart';
-        this.gameWonDisplay = 'GAME WON: Type 1 to restart';
+        this.gameWonDisplay = 'GAME WON: Type 1 to restart';     //Displays que se ponen en cada pantalla
         this.level2Display = 'Level 2: Type 2 to continue';
         this.level3Display = 'Level 3: Type 3 to continue';
     }
@@ -164,40 +182,43 @@ class Game {
         this.gameText = new TextLabel(10,canvasHeight/2,"60px Ubuntu Mono","black");
 
         //Generate crates
-        this.addGrid(canvasHeight/3);
+        this.addGrid(canvasHeight/3);  //Se llama un método que genera las cajas en el juego
         
     }
 
-    addGrid(rows){
+    addGrid(rows){  //Hice un nuevo método de generación de cajas para asegurar que se generen nuevas cajas cuando ya se han destruido, ya se 
+        // después de perder o pasar de nivel
         this.actors = [];
-        for(let i = 0; i < rows; i = i+canvasHeight/6){
-            for(let j = 0; j < canvasWidth -20; j = j+canvasWidth/8){
+        for(let i = 0; i < rows; i = i+canvasHeight/6){   //filas
+            for(let j = 0; j < canvasWidth -20; j = j+canvasWidth/10){  //columnas
                 let crateHitPoints;
-                if(Math.random() > 0.5){
+                if(Math.random() > 0.5){   //hacemos un 50/50 para darle 1 de vida al contador o 2 de vida al contador
                     crateHitPoints = 2;
                 }
                 else{
                     crateHitPoints = 1;
                 }
-                let crate = new hitPointGameObject(new Vector(j+20, i+10),60, 20,"grey",crateHitPoints);
+                let crate = new hitPointGameObject(new Vector(j+20, i+10),60, 20,"grey",'crate',crateHitPoints);  //en el paramétro de position vamos sumando i y j para mover la posición
+                // de las cajas progresivamente con el nested loop
                 crate.setSprite("../assets_emi/sprites/RTS_Crate.png");
-                this.actors.push(crate);
+                this.actors.push(crate);  //subimos cada caja al arreglo
             }
         } 
     }
-
+    //La teoria del draw() cambia bastante para poder hacer las transiciones de las pantallas
     draw(ctx) {
-        if(this.actors.length == 0 && this.levelCount == 3){
+        if(this.actors.length == 0 && this.levelCount == 3){  //primero checa si el arreglo el vacio y el contador de niveles es 3
+            // entonces llama el background del game won y activa la bandera 
             this.gameWonBackground.draw(ctx);
             this.gameText.draw(ctx,this.gameWonDisplay);
             this.gameWon = true;
         }
-        else if(this.actors.length == 0 && this.levelCount == 2){
+        else if(this.actors.length == 0 && this.levelCount == 2){ // si lo pasado no cumple checa si el contador es 2 y cambia la bandera de ese nivel
             this.level3Background.draw(ctx);
             this.gameText.draw(ctx,this.level3Display);
             this.level3Active = true;
         }
-        else if(this.actors.length == 0){
+        else if(this.actors.length == 0){  // aquí el jugador está en el primer nivel solo tiene que 
             this.level2Background.draw(ctx);
             this.gameText.draw(ctx,this.level2Display);
             this.level2Active = true;
@@ -244,38 +265,53 @@ class Game {
         
         this.ball.update(deltaTime);
 
-        if(boxOverlap(this.ball,this.player) && hitSurfacePaddle(this.ball,this.player)){
-                this.ball.velocity.y = this.ball.velocity.y*-1;
+        //LLamamos función overlap como antes
+        if(boxOverlap(this.ball,this.player)){
+            //Hice una nueva función para checar si el paddle choco contra la parte frontal del paddle
+            if(hitSurfacePaddle(this.ball, this.player)){
+                this.ball.velocity.y = this.ball.velocity.y*-1;     //Detecta colision y se hace cambiando dirección en y
+                this.ball.velocity = this.ball.velocity.times(1.05);  // Avances progresivos en la velocidad de juego, puede ir cabiando
+            }
+            //Aquí sino se cumple la funcion hitSurface pero detecó una colision lateral
+            //entonces cambia la direccion en x unicamente
+            else{
+                console.log("Hit side");
+                this.ball.velocity.x = this.ball.velocity.x*-1;  //Aplica lo mismo que en el comment pasado
                 this.ball.velocity = this.ball.velocity.times(1.05);
+            }
+            
         }
-        else if(boxOverlap(this.ball, this.player) && !hitSurfacePaddle(this.ball,this.player)){
-            this.ball.velocity.x = this.ball.velocity.x * -1;
-            this.ball.velocity = this.ball.velocity.times(1.05);
-        }
-
+        //El objeto de juego goalLeft funciona como pared izquierda
         if(boxOverlap(this.ball,this.goalLeft)){
                 this.ball.velocity.x = this.ball.velocity.x*-1;
                 this.ball.velocity = this.ball.velocity.times(1.05);
         }
-
+        //El objeto de juego goalRight funciona como pared derecha
         if(boxOverlap(this.ball,this.goalRight)){
                 this.ball.velocity.x = this.ball.velocity.x*-1;
                 this.ball.velocity = this.ball.velocity.times(1.05);
                 
         }
-
+        //Pared de arriba
         if(boxOverlap(this.ball,this.upperWall)){
                 this.ball.velocity.y = this.ball.velocity.y*-1;
                 this.ball.velocity = this.ball.velocity.times(1.05);
         }
-
+        //Pared de abajo que regresa pelota al origen y jugador pierde vida
+        //Se ve como la pelota se escapó del paddle
         if(boxOverlap(this.ball,this.lowerWall)){
                 this.ball.reset();
                 this.hitPoints = this.hitPoints -1;
         }
 
+        //Iteramos para cada caja en arreglo actor
+        //Cada caja en objeto de una nueva clase de GameObject con un atributo extra para guardar vida
+        //Si detetca colision con funcion boxOverlap entonces le reduce el contador de vida
+        //Hay 2 tipos de cajas: las que tienen 1 vida y las que tienene 2 vidas, si llega a cero las elimina del arreglo,
+        //pero si hay colision y todavia queda 1 en el contador de vida, significa que tenia 2 vidas
+        //entonces le pone color rojo la caja para indicar que esta apunto de romperse
         for(let i = 0; i < this.actors.length;i++){
-            if(boxOverlap(this.ball,this.actors[i]) && hitSurfacePaddle(this.ball,this.actors[i])){
+            if(boxOverlap(this.ball,this.actors[i])){
                 this.ball.velocity.y *= -1;
                 this.actors[i].damage();
                 if(this.actors[i].hitPoints == 0){
@@ -284,18 +320,7 @@ class Game {
                 else if(this.actors[i].hitPoints == 1){
                     this.actors[i].setSprite("../assets_emi/sprites/RTS_Crate_red.png");
                 }
-                break;
-            }
-            else if(boxOverlap(this.ball,this.actors[i]) && !hitSurfacePaddle(this.ball,this.actors[i])){
-                this.ball.velocity.x *= -1;
-                this.actors[i].damage();
-                if(this.actors[i].hitPoints == 0){
-                    this.actors.splice(i,1);
-                }
-                else if(this.actors[i].hitPoints == 1){
-                    this.actors[i].setSprite("../assets_emi/sprites/RTS_Crate_red.png");
-                }
-                break;
+                
             }
         }
         

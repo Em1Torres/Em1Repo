@@ -46,7 +46,7 @@ function hitSurfacePaddle(obj1,obj2){
     const T2 = obj2.position.y - obj2.halfSize.y;
     const B2 = obj2.position.y + obj2.halfSize.y;
     
-    return (L2 < L1 < R1 < R2);
+    return (L2 < L1 && R1 < R2);
 }
 
 /*
