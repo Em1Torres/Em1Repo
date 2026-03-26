@@ -39,13 +39,16 @@ class Ball extends GameObject{
         this.position = new Vector(canvasWidth/2, canvasHeight-70);
         this.velocity = new Vector(0,0);
 
+        //Este metodo resetea la posicion de la pelotitia a las coordenandas del vector
+        //y la pone en repose poniendo los valores de su velocidad en 0
+
     }
     serve(){
         let angle = Math.random() * ( Math.PI/2) + (Math.PI/4);  //Genera un angulo random del lanzamiento de la pelota
         let speed = 300; //multiplicamos por un factor más grande ya que está en segundos el tiempo
         this.velocity.x = Math.cos(angle)*speed;  //velocidad en x, mangitud * coseno
         this.velocity.y = -Math.sin(angle)*speed; //velocidad en y, magnitud * seno
-        
+        //Este metodo funcionara para inicializar el movimiento de la pelotita
     }
 }
 
@@ -182,7 +185,7 @@ class Game {
         this.gameText = new TextLabel(10,canvasHeight/2,"60px Ubuntu Mono","black");
 
         //Generate crates
-        this.addGrid(canvasHeight/3);  //Se llama un método que genera las cajas en el juego
+        this.addGrid(canvasWidth/4);  //Se llama un método que genera las cajas en el juego
         
     }
 
@@ -203,7 +206,16 @@ class Game {
                 crate.setSprite("../assets_emi/sprites/RTS_Crate.png");
                 this.actors.push(crate);  //subimos cada caja al arreglo
             }
-        } 
+        }
+        // for(let i = 0; i < rows; i = i + canvasHeight/6){
+        //     let crateHitPoints = 1;
+        //     let crate = new hitPointGameObject(new Vector(canvasWidth/2, i+10),60, 20,"grey",'crate',crateHitPoints);  //en el paramétro de position vamos sumando i y j para mover la posición
+        //     //         // de las cajas progresivamente con el nested loop
+        //     crate.setSprite("../assets_emi/sprites/RTS_Crate.png");
+        //     this.actors.push(crate);  //subimos cada caja al arreglo
+        //}
+            
+
     }
     //La teoria del draw() cambia bastante para poder hacer las transiciones de las pantallas
     draw(ctx) {
@@ -270,32 +282,32 @@ class Game {
             //Hice una nueva función para checar si el paddle choco contra la parte frontal del paddle
             if(hitSurfacePaddle(this.ball, this.player)){
                 this.ball.velocity.y = this.ball.velocity.y*-1;     //Detecta colision y se hace cambiando dirección en y
-                this.ball.velocity = this.ball.velocity.times(1.05);  // Avances progresivos en la velocidad de juego, puede ir cabiando
+                this.ball.velocity = this.ball.velocity.times(1.025);  // Avances progresivos en la velocidad de juego, puede ir cabiando
             }
             //Aquí sino se cumple la funcion hitSurface pero detecó una colision lateral
             //entonces cambia la direccion en x unicamente
             else{
                 console.log("Hit side");
                 this.ball.velocity.x = this.ball.velocity.x*-1;  //Aplica lo mismo que en el comment pasado
-                this.ball.velocity = this.ball.velocity.times(1.05);
+                this.ball.velocity = this.ball.velocity.times(1.025); 
             }
             
         }
         //El objeto de juego goalLeft funciona como pared izquierda
-        if(boxOverlap(this.ball,this.goalLeft)){
+        if(boxOverlap(this.ball,this.goalLeft)){  
                 this.ball.velocity.x = this.ball.velocity.x*-1;
-                this.ball.velocity = this.ball.velocity.times(1.05);
+                this.ball.velocity = this.ball.velocity.times(1.025);
         }
         //El objeto de juego goalRight funciona como pared derecha
         if(boxOverlap(this.ball,this.goalRight)){
                 this.ball.velocity.x = this.ball.velocity.x*-1;
-                this.ball.velocity = this.ball.velocity.times(1.05);
+                this.ball.velocity = this.ball.velocity.times(1.025);
                 
         }
         //Pared de arriba
         if(boxOverlap(this.ball,this.upperWall)){
                 this.ball.velocity.y = this.ball.velocity.y*-1;
-                this.ball.velocity = this.ball.velocity.times(1.05);
+                this.ball.velocity = this.ball.velocity.times(1.025);
         }
         //Pared de abajo que regresa pelota al origen y jugador pierde vida
         //Se ve como la pelota se escapó del paddle
@@ -358,26 +370,26 @@ class Game {
     createEventListeners() {
         window.addEventListener('keydown', (event) => {
             if(this.gameWon){
-                if(event.key == '1'){
-                    this.hitPoints = 3;
-                    this.gameWon = false;
-                    this.levelCount = 1;
+                if(event.key == '1'){       //Cree un event listener cuando se detecta la bandera juego ganado
+                    this.hitPoints = 3;     //Da la opción al jugador de reiniciar y se invierte la bandera
+                    this.gameWon = false;   //regresamos la pelota a su posicion original,
+                    this.levelCount = 1;    //el contador de nivel se reinicia y vuelve a llamar addGrid() para reiniciar el sistema de cajas
                     this.ball.reset();
-                    this.addGrid(canvasHeight/3);
+                    this.addGrid(canvasHeight/4);  //canvasHeight/3
                 }
             }
             else if(this.level3Active){
                 if(event.key == '3'){
-                    this.hitPoints = 3;
-                    this.level3Active = false;
-                    this.levelCount = this.levelCount + 1;
+                    this.hitPoints = 3;         //Funciona con la bandera asignada para este nivel, pone la variable en falso nuevamente
+                    this.level3Active = false;   //pero incrementa la cantidad de filas que hay en el método addGrid() para indicar mayor dificultad
+                    this.levelCount = this.levelCount + 1;   //aquí no reinicia el contador de nivel sino lo incrementa 
                     this.ball.reset();
-                    this.addGrid(canvasHeight - canvasHeight/3);
+                    this.addGrid(canvasHeight - canvasHeight/3); //canvasHeight - canvasHeight/3
                 }
             }
             else if(this.level2Active){
                 if(event.key == '2'){
-                    this.hitPoints = 3;
+                    this.hitPoints = 3;         //Igual que el previo event listener pero con una dificultad previa a la inicial
                     this.level2Active = false;
                     this.levelCount = this.levelCount + 1;
                     this.ball.reset();
@@ -386,13 +398,13 @@ class Game {
             }
             else if(this.hitPoints > 0){
                 if (event.key == 'a') {
-                    this.addKey('left',this.player);
+                    this.addKey('left',this.player);        //parte del juego activa y mecánica mientras los hitpoints no sean 0
                 } else if (event.key == 'd') {
                     this.addKey('right',this.player);
                 } 
                 if(event.key == " "){
                     if(this.ball.velocity.x == 0 && this.ball.velocity.y == 0){
-                        this.ball.serve();
+                        this.ball.serve();   //inicializa la pelota con un metodo serve() que genera un angulo de aprox 45 hacia arriba con una velocidad definida
                     }
                 }
             }
@@ -400,7 +412,7 @@ class Game {
                 if(event.key == '1'){
                     this.hitPoints = 3;
                     this.levelCount = 1; 
-                    this.addGrid(canvasHeight/3);
+                    this.addGrid(canvasHeight/4);  //canvasHeight/3
                 }
             }
 
@@ -412,7 +424,7 @@ class Game {
         window.addEventListener('keyup', (event) => {
             if(this.hitPoints > 0){
                 if (event.key == 'a') {
-                    this.delKey('left',this.player);
+                    this.delKey('left',this.player);       //parte del sistema de movimiento de la paleta mientras el contador de vida no sea 0
                 } else if (event.key == 'd') {
                     this.delKey('right', this.player);
                 } 
