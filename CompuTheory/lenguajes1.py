@@ -1,3 +1,7 @@
+#Programa que recibe un string x y regresa True si pertence al lenguaje L
+#y False en caso contrario.
+# L = (a|b)*bb*(a|b)*
+
 def reconoce (w):
     estado = 0
     for c in w:
