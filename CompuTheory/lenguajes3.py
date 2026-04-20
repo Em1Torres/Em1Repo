@@ -3,7 +3,7 @@ tabla = [[1,6,7,8,0,8],
          [3,8,8,8,8,8],
          [3,5,5,8,5,8]]
 
-s = "125+243.56    +    97.042 +    25$"
+s = "-+125+243.56 -   +  +  97.042 -  -  25$"
 b = " \n\t$"
 d = "0123456789"
 
@@ -14,7 +14,7 @@ token = ''
 
 while (s[p] != '$' or (s[p] == '$' and estado != 0)) and (estado != 8):
     c = s[p]
-    print(p)
+    
  
     #diccionario para la columna
     if c in d:
@@ -31,6 +31,7 @@ while (s[p] != '$' or (s[p] == '$' and estado != 0)) and (estado != 8):
         col = 5
     
     estado = tabla[estado][col]
+    print('Estado: '+ str(estado))
 
     if estado == 4:
         print(lexema, "ENTERO")
@@ -50,7 +51,7 @@ while (s[p] != '$' or (s[p] == '$' and estado != 0)) and (estado != 8):
         token = ''
         estado = 0
     elif estado == 7:
-        print('+', "RESTA")
+        print('-', "RESTA")
         lexema = ''
         token = ''
         estado = 0
