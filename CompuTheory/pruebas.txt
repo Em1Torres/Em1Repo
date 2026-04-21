@@ -1,0 +1,37 @@
+em1_pro = -3.1E-8 + 215 - 12 + (-2) // comentario sencillo$
+
+x = 10 + 20$
+
+var_1 = 3.14E10 - 5$
+
+a = b + c * d - e / f$
+
+numero = -0.25E-3$
+
+hola_mundo123 = 999$
+
+x = (5 + 3) * (2 - 8)$
+
+prueba = 123abc$  
+
+test = 5 // este es un comentario$
+
+bad@token = 5$
+
+a = b + c$
+
+x = 10 + 20$
+
+var_1 = 3.14E10 - 5$
+
+resultado = (a + b) * (c - d) / e$
+
+neg = -5 + (-3)$
+
+test = 5 // comentario simple$
+
+final_res = (var1 + 3.14E-2) * (-5 + otro_var) // cálculo$
+
+a = b + @$
+
+-32.5E-10 ^ 5 = {}_____@$
