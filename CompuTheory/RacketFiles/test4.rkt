@@ -73,10 +73,11 @@
 
 (SumaLista '(1 2 3 4 5 6))
 
+; Ejercicio: te regresa si un elemento pertenece a una lista
 (define (miembro n l)
     (if (null? l)
         #f
-        (if (= n (car l))
+        (if (equal? n (car l)) ; Cambia a equal para letras, = para numeros
             #t
             (miembro n (cdr l))
         )
@@ -84,4 +85,46 @@
     )
 )
 
-(miembro 3 '(1 2 3 4 5))
+;;; (miembro 3 '(1 2 3 4 5))
+
+
+
+(define (cuantas-vocales l)
+    (if (null? l)
+        0
+        (if (miembro (car l) '(a e i o u A E I O U))
+            (+ 1 (cuantas-vocales (cdr l)))
+            (+ 0 (cuantas-vocales (cdr l)))
+        )
+    )   
+)
+
+(cuantas-vocales '(x y z a b c e))
+
+;;; (define (reversa l)
+;;;     (if (null? l)
+    
+;;;     )
+;;; )
+
+(define (mapea l f)
+    (if (null? l)
+        '()
+        (cons (f (car l)) (mapea (cdr l) f))
+    )
+)
+pi
+(mapea '(11 22 33) cos)
+
+(define (reduce Op V l)
+    (if (null? l)
+        (if (or(equal? Op +)(equal? Op -))
+            (Op 0 V)
+            (Op 1 V)
+        )
+        (Op (car l) (reduce Op V (cdr l)))
+    )
+)
+
+(reduce * 4 '(1 2 3))
+
