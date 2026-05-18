@@ -145,5 +145,22 @@
 (positives '(12 -4 3 -1 -10 -13 6 -5))
 (positives '(-4 -1 -10 -13 -5))
 
+; 11. Funcion recursiva que suma los elementos de una lista
+(define (add-list l)
+    (if (null? l)
+        (+ 0 0)
+        (+ (car l)(add-list (cdr l)))
+    )
+)
+; Ejemplos:
+(add-list '())
+(add-list '(2 4 1 3))
+(add-list '(1 2 3 4 5 6 7 8 9 10))
 
-
+; 12. Función que recibe listas con sub-listas de parejas e invierte las parejas en otra lista
+;;; (define (invert-pairs l)
+;;;     (if (null? l)
+;;;         '()
+;;;         (cons (caar l))
+;;;     )
+;;; )
