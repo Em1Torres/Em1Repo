@@ -158,9 +158,13 @@
 (add-list '(1 2 3 4 5 6 7 8 9 10))
 
 ; 12. Función que recibe listas con sub-listas de parejas e invierte las parejas en otra lista
-;;; (define (invert-pairs l)
-;;;     (if (null? l)
-;;;         '()
-;;;         (cons (caar l))
-;;;     )
-;;; )
+(define (invert-pairs l)
+    (if (null? l)
+        '()
+        (cons (cons (car (cdar l))(caar l)) (invert-pairs (cdr l)))
+    )
+)
+; Ejemplos: 
+(invert-pairs '())
+(invert-pairs '((a 1)(a 2)(b 1)(b 2)))
+(invert-pairs '((January 1)(February 2)(March 3)))
