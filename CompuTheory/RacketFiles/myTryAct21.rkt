@@ -210,13 +210,9 @@ of fur happy kitty sleepy kitty
 purr purr purr))
 
 ; 15. Función que calcula el producto punto de dos listas de igual longitud
-(define (dot-product a b)
-    (if (or (null? a) (null? b))
-        0
-        (+ (* (car a) (car b))
-           (dot-product (cdr a) (cdr b)))
-    )
-)
+
+; Pendiente
+
 ; Ejemplos:
 (dot-product '() '())
 (dot-product '(1 2 3) '(4 5 6))
@@ -267,19 +263,9 @@ purr purr purr))
 
 ; 18. Función que replica n veces cada elemento de una lista
 ; Auxiliar: repite un solo elemento x exactamente n veces
-(define (repeat-elem x n)
-    (if (= n 0)
-        '()
-        (cons x (repeat-elem x (- n 1)))
-    )
-)
-(define (replic n lst)
-    (if (null? lst)
-        '()
-        (append (repeat-elem (car lst) n)
-                (replic n (cdr lst)))
-    )
-)
+
+; Pendiente
+
 ; Ejemplos:
 (replic 7 '())
 (replic 0 '(a b c))
@@ -289,16 +275,9 @@ purr purr purr))
 
 ; 19. Función que expande cada elemento i de la lista repitiéndolo i veces
 ; Auxiliar: igual que repeat-elem, reutilizamos la de arriba
-(define (expand-helper lst n)
-    (if (null? lst)
-        '()
-        (append (repeat-elem (car lst) n)
-                (expand-helper (cdr lst) (+ n 1)))
-    )
-)
-(define (expand lst)
-    (expand-helper lst 1)
-)
+
+; Pendiente
+
 ; Ejemplos:
 (expand '())
 (expand '(a))
@@ -308,19 +287,9 @@ purr purr purr))
 
 ; 20. Función que convierte un entero n a su representación binaria como lista
 ; Auxiliar: construye la lista en orden correcto usando recursión
-(define (binary-helper n)
-    (if (= n 0)
-        '()
-        (append (binary-helper (quotient n 2))
-                (list (remainder n 2)))
-    )
-)
-(define (binary n)
-    (if (= n 0)
-        '()
-        (binary-helper n)
-    )
-)
+
+; Pendiente
+
 ; Ejemplos:
 (binary 0)
 (binary 30)

@@ -64,14 +64,14 @@
 ; suma-lista(lista) = { lista == nul => 0, 
 ; car(lista) + suma-lista(cdr(lista)) }
 
-(define (SumaLista l)
+(define (suma-lista l)
     (if (null? l)
         0
-        (+ (car l)(SumaLista (cdr l)))    
+        (+ (car l)(suma-lista(cdr l)))    
     )
 )
 
-(SumaLista '(1 2 3 4 5 6))
+(suma-lista'(1 2 3 4 5 6))
 
 ; Ejercicio: te regresa si un elemento pertenece a una lista
 (define (miembro n l)
