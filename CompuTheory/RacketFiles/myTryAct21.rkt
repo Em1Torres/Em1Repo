@@ -214,9 +214,9 @@ purr purr purr))
 ; Pendiente
 
 ; Ejemplos:
-(dot-product '() '())
-(dot-product '(1 2 3) '(4 5 6))
-(dot-product '(1.3 3.4 5.7 9.5 10.4) '(-4.5 3.0 1.5 0.9 0.0))
+;;; (dot-product '() '())
+;;; (dot-product '(1 2 3) '(4 5 6))
+;;; (dot-product '(1.3 3.4 5.7 9.5 10.4) '(-4.5 3.0 1.5 0.9 0.0))
 
 ; 16. Función average en racket que recibe una lst como entrada
 (define (suma-lista l) ; Función de profe victor
@@ -263,8 +263,20 @@ purr purr purr))
 
 ; 18. Función que replica n veces cada elemento de una lista
 ; Auxiliar: repite un solo elemento x exactamente n veces
+(define (aux-replic n e)
+    (if (= n 0)
+        '()
+        (cons e (aux-replic (- n 1) e))
+    )
+)
 
-; Pendiente
+(define (replic n lst)
+    (if (null? lst)
+        '()
+        (cons (aux-replic n (car lst)) (replic n (cdr lst)))
+    )
+
+)
 
 ; Ejemplos:
 (replic 7 '())
@@ -276,7 +288,12 @@ purr purr purr))
 ; 19. Función que expande cada elemento i de la lista repitiéndolo i veces
 ; Auxiliar: igual que repeat-elem, reutilizamos la de arriba
 
-; Pendiente
+(define (expand lst)
+    (if (null? lst)
+        '()
+        (cons (aux-replic (+ n 1) (car lst)) (expand (cdr lst)))
+    )
+)
 
 ; Ejemplos:
 (expand '())
@@ -291,6 +308,6 @@ purr purr purr))
 ; Pendiente
 
 ; Ejemplos:
-(binary 0)
-(binary 30)
-(binary 45123)
+;;; (binary 0)
+;;; (binary 30)
+;;; (binary 45123)
