@@ -273,7 +273,7 @@ purr purr purr))
 (define (replic n lst)
     (if (null? lst)
         '()
-        (cons (aux-replic n (car lst)) (replic n (cdr lst)))
+        (append (aux-replic n (car lst)) (replic n (cdr lst)))
     )
 
 )
@@ -287,11 +287,17 @@ purr purr purr))
 
 ; 19. Función que expande cada elemento i de la lista repitiéndolo i veces
 ; Auxiliar: igual que repeat-elem, reutilizamos la de arriba
+(define (aux-expand n lst)
+    (if (null? lst)
+        '()
+        (append (aux-replic n (car lst)) (aux-expand (+ n 1)(cdr lst)))
+    )
+)
 
 (define (expand lst)
     (if (null? lst)
         '()
-        (cons (aux-replic (+ n 1) (car lst)) (expand (cdr lst)))
+        (aux-expand 1 lst)
     )
 )
 
