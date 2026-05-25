@@ -63,3 +63,9 @@ Hay que incluir en code instrucciones para hilos como en python, depende de nues
 
 - Correr I/O bounds en hilos (input y output)
 - Correr CPU bounds en multiprocesos
+*Ver ejemplo de multiprocesos en python*
+
+*Ejemplo de programa CPU-bound:* hacer un contador de 50,000,000 hacia abajo (se tendrán 3 archivos en series, paralelo con hilos, paralelo con multiprocesadores).
+
+- Si tu programa ocupa muchas operaciones matemáticas tu programa es más CPU bound (multiprocesos)
+- Si tu programa ocupa mucho input y output es IO bound (threads)
