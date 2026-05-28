@@ -23,3 +23,13 @@ Fecha: 25 de mayo del 2026
 
 - Una regla compuesta de un string que hace una relación con una flecha con string izq con string derecho: A -> combinación de variables
 - No terminales: variables sustituibles / terminales: variables no sustituibles
+
+*Definición formal*
+
+- CFG se denota como G=(V,T,P,S)
+- V = conjunto de variables (no terminales) (parecido a estados de DFA)
+- T = conjunto de terminales
+- P = conjunto finito de producciones (A -> alpha) | (A es una variable no terminal) && (alpha conjunto de variables terminales y no terminales)
+- S = símbolo de incio pertenece a V
+
+> Ejemplo: ![alt text](image.png)
