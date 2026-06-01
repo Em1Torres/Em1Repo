@@ -33,3 +33,52 @@ Fecha: 25 de mayo del 2026
 - S = símbolo de incio pertenece a V
 
 > Ejemplo: ![alt text](image.png)
+
+*Haciendo a^n b^m | 0 <= n <= m <= 2n*
+
+> Ejercicio: ![alt text](image-1.png)
+
+- Última: L(G) = { a^n b^m c^m d^2n | n > 0, m > 0}
+
+    -> A -> aSdd | aAdd
+    
+    3-> S -> bSc | bc
+
+- Palíndromo: string que se lee igual en reverso
+
+    S -> aSa | bSb | vacío | a | b
+
+- Todas las expresiones regulares se pueden representar con una Gramática Libre de Contexto.
+- Las GFG pueden ser representada con trees; si tiene n nodos -> la root S tinene n children.
+
+**BNF**
+
+- Definir la gramática de un lenguaje de producción. Entonces son gramáticas libres de contexto únicamente para lenguajes de programación.
+- Las crea John Backus para definir la gramática del algol
+- Símbolo no terminales van en <>
+- Cadena vacía: <vacía>
+- Símbolos terminales sin brackets
+- ::= representa la flecha de producción de las CFG.
+
+*Ejemplos:*
+
+- BNF para números reales 
+
+    <número-real> ::= <secuencia-dígitos>.<secuencia-dígitos>
+
+    <secuencia-dígitos> ::= <dígito> | <dígito> <secuencia-dígitos>
+
+    <dígito> ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
+
+- BNF para expresiones aritméticas tal que solo pueden + o * y se usan paréntesis
+
+    <expresión> ::= <expression> + <expresión> | <expression> * <expresión>
+    | (<expresión>) | <variable> | <constante>
+
+> Misma gramática pero sin ambigüedad:![alt text](image-2.png)
+
+- BNF extendida: También podemos usar paréntesis para definir que se repite un BNF, por ejemplo:
+
+Expresión ::= Término{('+'|'-')Término}
+Término ::= Factor{('*'|'/')Factor}
+Factor ::= '('Expresiín')'|Variable|Constante
