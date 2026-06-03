@@ -1,5 +1,6 @@
 import os #Librería para poder iterar todo un folder 
 import time
+from multiprocessing import Process 
 
 categorias = {
     'letra': 0,
@@ -160,11 +161,17 @@ def getCppFiles(path):
                 temp.append(raiz + "/" + archivo)
     return temp
 
-#Aquí de manera secuencial hacemos "traversing" de cada string en el arreglo y lo llamamos en 
-# la función del lexer
-inicio = time.time()
-files = getCppFiles("C:/Users/Usuario Final/Developer/Em1Repo/CompuTheory/Evidencia2");
-for file in files:
-    lexerCppHTML(file)
-fin = time.time()
-print("Tiempo: ", fin-inicio)
+
+if __name__ == '__main__':
+    files = getCppFiles("C:/Users/Usuario Final/Developer/Em1Repo/CompuTheory/Evidencia2");
+    procedures = []
+    for file in files:
+        p = Process(target=lexerCppHTML,args=(file,))
+        procedures.append(p)
+    inicio = time.time() 
+    for procedure in procedures:
+        procedure.start()
+    for procedure in procedures:
+        procedure.join() 
+    fin = time.time()
+    print("Tiempo: ", fin-inicio)
