@@ -6,7 +6,8 @@
 
 **Modelo de la máquina de turing**
 
-* Modelo formal para Procedimineto efectivo:
+*Modelo formal para Procedimineto efectivo:*
+
 - 1: cada procedimiento debe ser descrito de forma finita
 - 2: debe consistir en pasos discretos (no continuos y todas nuestras compus hacen pasos discretos) -> se llevan a cabo mecánicamente
 

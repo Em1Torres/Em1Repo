@@ -9,16 +9,16 @@ def consultar(id_persona):
 
 
 def guardar(id_persona, data):
-    print(data[:6]+ "2")
+    print(data[:5]+ "2")
     time.sleep(6)
-    print(data[6:]+ " 2")
+    print(data[5:]+ " 2")
 
 
 inicio = datetime.datetime.now()
 # consultar(1)  # Sin usar hilos
 # guardar(1, "Hola Mundo")
 t1 = threading.Thread(name = 'Thread1', target= consultar, args=(1,))
-t2 = threading.Thread(name = 'Thread2', target= guardar, args=(1,"Hello World"))
+t2 = threading.Thread(name = 'Thread2', target= guardar, args=(1,"Hola Mundo"))
 t1.start()
 t2.start()
 t1.join()  #Aquí sin el join no espera el procedimiento de la función

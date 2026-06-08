@@ -15,3 +15,9 @@ if __name__ == "__main__":
     p2.join()
     fin = time.perf_counter()
     print(f"Tiempo: {fin-inicio} segundos")
+
+# inicio = time.perf_counter()
+# task()
+# task()
+# fin = time.perf_counter()
+# print(f"Tiempo: {fin-inicio} segundos")

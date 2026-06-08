@@ -80,5 +80,7 @@ Fecha: 25 de mayo del 2026
 - BNF extendida: También podemos usar paréntesis para definir que se repite un BNF, por ejemplo:
 
 Expresión ::= Término{('+'|'-')Término}
+
 Término ::= Factor{('*'|'/')Factor}
+
 Factor ::= '('Expresiín')'|Variable|Constante

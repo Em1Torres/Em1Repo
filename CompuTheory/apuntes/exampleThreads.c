@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cstdlib>      // Para exit()
-#include <unistd.h>     // Para fork()
-#include <sys/wait.h>    // Para wait()
+
 
 #define SIZE 100
 #define NUMPROCS 10
@@ -36,3 +35,5 @@ void multiply(int myid) {
         }
     }
 }
+
+//Hay que correr en linux para que corra, en windows no funciona
