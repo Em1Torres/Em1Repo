@@ -163,7 +163,7 @@ def getCppFiles(path):
 #Aquí de manera secuencial hacemos "traversing" de cada string en el arreglo y lo llamamos en 
 # la función del lexer
 inicio = time.time()
-files = getCppFiles("C:/Users/Usuario Final/Developer/Em1Repo/CompuTheory/Evidencia2");
+files = getCppFiles("C:/Users/gking/Desktop/Em1Repo/CompuTheory/Evidencia2");
 for file in files:
     lexerCppHTML(file)
 fin = time.time()
