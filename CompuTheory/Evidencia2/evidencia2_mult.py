@@ -174,4 +174,4 @@ if __name__ == '__main__':
     for procedure in procedures:
         procedure.join() 
     fin = time.time()
-    print("Tiempo: ", fin-inicio)
+    print("Tiempo: ", fin-inicio) 

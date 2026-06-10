@@ -247,7 +247,7 @@ purr purr purr))
 (define (sum-sq-diff lst media)
     (if (null? lst)
         0
-        (+ (expt (- (car lst) media) 2)
+        (+ (pow (- (car lst) media) 2)
            (sum-sq-diff (cdr lst) media))
     )
 )
