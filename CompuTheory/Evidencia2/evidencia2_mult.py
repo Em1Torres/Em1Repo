@@ -163,7 +163,7 @@ def getCppFiles(path):
 
 
 if __name__ == '__main__':
-    files = getCppFiles("C:/Users/gking/Desktop/Em1Repo/CompuTheory/Evidencia2");
+    files = getCppFiles("C:/Users/Usuario Final/Developer/Em1Repo/CompuTheory/Evidencia2");
     procedures = []
     for file in files:
         p = Process(target=lexerCppHTML,args=(file,))
