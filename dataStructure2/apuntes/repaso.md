@@ -1,0 +1,1 @@
+- Idea of Divide and conquer: that you have a problem and start spliting the problem in sub-problems, and hence repeating this process recursivly.
