@@ -55,7 +55,35 @@ Website information like passwords and username are stored inside databases and 
 **Common password attacks**
 
 + Random guesses
-+ Fishing
-+ Brute force attacks
-+ Password spraying
-+ Rainbow table attacks
++ Fishing: basically when they send an email and you click the link.
++ Brute force attacks: same as the one before.
++ Password spraying: 
++ Rainbow table attacks: its an app that has common passwords and it keeps trying them.
+
+***CyberSecurity***
+
+Refers to the safely protection of information systems like hardware, software and associated infrastructure. Protects things like data, services and unauthorized access. Preventing from someone undesired to enter the system.
+
+**Information privacy**
+
++ Protection of personal data when its being collected, used, stored or shared.
++ Controlling how its used.
++ Example: a company collects your name and email. The privacy rules determine how it can be used and shared, so it depends on the organization.
+
+**Role of Data privacy**
+
++ Protection of personal information: keeps it from unauthorized access.
++ Individual control: give people control of their personal information.
++ Preventing identity theft and fraud: protects this type of informations and stuff that criminals could use for identity theft.
++ Mantaining trust amd reputation: when organizations protect data from customers it builds trust towards them.
++ Complying with global regulations: 
+
+**Regulatory compliance**
+
+Basically, using the law of the government to defend ourselves against this types attacks. Or if the policy can't do certain things with your personal data and still ignore, you can complain and make lawsuits.
+
+*Financial safety:* this type of attacks can affect lots of money to both the customer and the companies involved.
+
+*Sensitive data:* is what cybersecurity is responsible for when it comes to protection.
+
++ Cyber attacks are expensive
