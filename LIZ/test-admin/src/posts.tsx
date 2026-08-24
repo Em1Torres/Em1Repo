@@ -1,0 +1,27 @@
+import { List, 
+    DataTable, SimpleList } from "react-admin";
+import { useMediaQuery, Theme } from "@mui/material";
+
+export const PostList = () =>{
+    const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
+    return (
+        <List>
+            {isSmall ? (
+                <SimpleList
+                    primaryText = {(record) => record.userId}
+                    secondaryText = {(record) => record.title}
+                />
+                ) : (
+                    <DataTable>
+                        <DataTable.Col source="userId" />
+                        <DataTable.Col source="id" />
+                        <DataTable.Col source="title" />
+                        <DataTable.Col source="body" />
+
+                    </DataTable>
+
+                )
+            }
+        </List>
+    );
+}
