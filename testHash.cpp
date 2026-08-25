@@ -1,5 +1,6 @@
 #include <iostream> 
-#include <list> 
+#include <list>
+#include <string>
 using namespace std; 
 
 class Hashing { 
