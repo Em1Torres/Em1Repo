@@ -1,5 +1,6 @@
 import { List, 
-    DataTable, SimpleList } from "react-admin";
+    DataTable, SimpleList, ReferenceField, EditButton, Edit, Create, ReferenceInput, TextInput, 
+    SimpleForm} from "react-admin";
 import { useMediaQuery, Theme } from "@mui/material";
 
 export const TodoList = () =>{
@@ -12,12 +13,35 @@ export const TodoList = () =>{
                 />
                 ) : (
                     <DataTable>
-                        <DataTable.Col source="userId" />
+                        <DataTable.Col source="userId" >
+                            <ReferenceField source="userId" reference="users" link="show"/> 
+                        </DataTable.Col>
                         <DataTable.Col source="id" />
                         <DataTable.Col source="title" />
+                        <DataTable.Col>
+                            <EditButton />
+                        </DataTable.Col>
                     </DataTable>
                 )
             }
         </List>
     );
 }
+export const TodoEdit = () =>(
+    <Edit>
+        <SimpleForm warnWhenUnsavedChanges>
+            <TextInput disabled source="id" />
+            <ReferenceInput source="userId" reference="users" />
+            <TextInput required source="title" />
+            
+        </SimpleForm>
+    </Edit>
+);
+export const TodoCreate = () =>(
+    <Create>
+        <SimpleForm>
+            <ReferenceInput required source="userId" reference="users" />
+            <TextInput required source="title" />
+        </SimpleForm>
+    </Create>
+);

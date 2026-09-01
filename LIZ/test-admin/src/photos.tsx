@@ -1,9 +1,10 @@
 import { List, 
     DataTable, SimpleList, ReferenceField, EditButton, Edit, Create, ReferenceInput, TextInput, 
-    SimpleForm} from "react-admin";
+    SimpleForm,
+    SelectInput, ImageField} from "react-admin";
 import { useMediaQuery, Theme } from "@mui/material";
 
-export const PostList = () =>{
+export const PhotoList = () =>{
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
     return (
         <List>
@@ -14,12 +15,13 @@ export const PostList = () =>{
                 />
                 ) : (
                     <DataTable>
-                        <DataTable.Col source="userId" >
-                            <ReferenceField source="userId" reference="users" link="show"/> 
-                        </DataTable.Col>
+                        <DataTable.Col source="albumId" />
                         <DataTable.Col source="id" />
                         <DataTable.Col source="title" />
-                        <DataTable.Col source="body" />
+                        <DataTable.Col source="url" />
+                        <DataTable.Col source="thumbnailUrl">
+                            <ImageField source="url" />
+                        </DataTable.Col>
                         <DataTable.Col>
                             <EditButton />
                         </DataTable.Col>
@@ -31,23 +33,37 @@ export const PostList = () =>{
         </List>
     );
 }
-export const PostEdit = () =>(
+export const PhotoEdit = () =>(
     <Edit>
         <SimpleForm warnWhenUnsavedChanges>
             <TextInput disabled source="id" />
-            <ReferenceInput source="userId" reference="users" />
-            <TextInput required source="title" />
-            <TextInput source="body" />
+            <ReferenceInput source="albumId" reference="albums">
+                <SelectInput optionText="title" />
+            </ReferenceInput>
+        
+        <TextInput
+            required
+            source="url"
+            type="url"
+        />
+        
+        <TextInput
+            required
+            source="thumbnailUrl"
+            multiline
+            rows={5}
+        />
         </SimpleForm>
     </Edit>
 );
 
-export const PostCreate = () =>(
+export const PhotoCreate = () =>(
     <Create>
-        <SimpleForm>
-            <ReferenceInput required source="userId" reference="users" />
-            <TextInput required source="title" />
-            <TextInput required source="body" multiline rows={5} />
+        <SimpleForm warnWhenUnsavedChanges>
+            <ReferenceInput required source="albumId" reference="albums">
+                <SelectInput optionText="title" />
+            </ReferenceInput>
+    
         </SimpleForm>
     </Create>
 );
