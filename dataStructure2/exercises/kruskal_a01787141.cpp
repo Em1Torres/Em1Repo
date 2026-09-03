@@ -2,8 +2,9 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
-#include<map>
-#include<algorithm>
+#include <map>
+#include <algorithm>
+#include "doubleLL.h"
 using namespace std;
 
 void Bubble_Sort(vector<vector<int>> &unsorted) {
@@ -21,8 +22,46 @@ void Bubble_Sort(vector<vector<int>> &unsorted) {
             break;
         }
     }
-
 }
+
+class Group{
+public:
+    int root;
+    vector <int> members;
+}; 
+
+class DSJ{
+private:
+    vector<Group> groups;
+    vector<int> node2Group;
+public:
+    DSJ(int n){
+        for(int i = 0; i < n; i++){
+            groups[i].root = i;
+            groups[i].members.push_back(i);
+            node2Group.push_back(i);
+        }
+    }
+    int find(int node){
+        return groups[node2Group[node]].root;
+    }
+    bool join(int n1, int n2){
+        int group_n1 = node2Group[n1];
+        int group_n2 = node2Group[n2];
+
+        if(group_n1 == group_n2)
+            return false;
+        
+        if(groups[group_n1].members.size() < groups[group_n2].members.size()){
+            int temp = group_n2;
+            group_n2 = group_n1;
+            group_n1 = temp;
+        }
+            
+        
+    }
+    
+};
 
 // void Select_Edges(vector<vector<int>> &Possible_Edges) {
 //     vector <int> Nodes;
@@ -89,12 +128,10 @@ int main() {
     Bubble_Sort(edges);
     //Select_Edges(edges);
 
-    for (int i = 0; i < edges.size(); i++) {
-        for (int j = 0; j < edges[i].size(); j++) {
-            cout << edges[i][j] << " ";
-        }
-        cout << endl;
-    }
+    cout << "The edges (by weight) in ascending order are: " << endl;
+    for(int i = 0;  i < edges.size(); i++)
+        cout << edges[i][2] << " ";
+    cout << endl;
 
     return 0;
 }

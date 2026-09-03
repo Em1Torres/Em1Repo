@@ -14,12 +14,12 @@ export const PostList = () =>{
                 />
                 ) : (
                     <DataTable>
-                        <DataTable.Col source="userId" >
+                        <DataTable.Col source="userId" label="usuario">
                             <ReferenceField source="userId" reference="users" link="show"/> 
                         </DataTable.Col>
-                        <DataTable.Col source="id" />
-                        <DataTable.Col source="title" />
-                        <DataTable.Col source="body" />
+                        <DataTable.Col source="id" label="ID"/>
+                        <DataTable.Col source="title" label="Título"/>
+                        <DataTable.Col source="body" label="Cuerpo"/>
                         <DataTable.Col>
                             <EditButton />
                         </DataTable.Col>
@@ -36,8 +36,8 @@ export const PostEdit = () =>(
         <SimpleForm warnWhenUnsavedChanges>
             <TextInput disabled source="id" />
             <ReferenceInput source="userId" reference="users" />
-            <TextInput required source="title" />
-            <TextInput source="body" />
+            <TextInput required source="title" label="Título"/>
+            <TextInput source="body" label="Cuerpo"/>
         </SimpleForm>
     </Edit>
 );
@@ -46,8 +46,8 @@ export const PostCreate = () =>(
     <Create>
         <SimpleForm>
             <ReferenceInput required source="userId" reference="users" />
-            <TextInput required source="title" />
-            <TextInput required source="body" multiline rows={5} />
+            <TextInput required source="title" label="Título"/>
+            <TextInput required source="body" label="Cuerpo" multiline rows={5} />
         </SimpleForm>
     </Create>
 );

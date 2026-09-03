@@ -1,4 +1,4 @@
-import { Create, DataTable, Edit, EditButton, EmailField, List, ReferenceInput, SelectInput, SimpleForm, SimpleList, TextInput, } from "react-admin";
+import { Create, DataTable, Edit, EditButton, EmailField, List, ReferenceField, ReferenceInput, SelectInput, SimpleForm, SimpleList, TextInput, } from "react-admin";
 import { useMediaQuery, Theme } from "@mui/material";
 
 export const CommentList = () => {
@@ -16,13 +16,15 @@ export const CommentList = () => {
                 />
             ) : (
                 <DataTable>
-                    <DataTable.Col source="postId" />
-                    <DataTable.Col source="id" />
-                    <DataTable.Col source="name" />
-                    <DataTable.Col source="email" >
+                    <DataTable.Col source="postId" label="post">
+                        <ReferenceField source="postId" reference="posts" link="show"/>
+                    </DataTable.Col>
+                    <DataTable.Col source="id" label="ID"/>
+                    <DataTable.Col source="name" label="Nombre"/>
+                    <DataTable.Col source="email" label="Email">
                         <EmailField source="email" />
                     </DataTable.Col>
-                    <DataTable.Col source="body" />
+                    <DataTable.Col source="body" label="Cuerpo"/>
                      <DataTable.Col>
                     <EditButton />
                     </DataTable.Col>
@@ -43,17 +45,19 @@ export const CommentEdit = () => (
                 <SelectInput optionText="title" />
             </ReferenceInput>
 
-            <TextInput required source="name" />
+            <TextInput required source="name" label="Nombre" />
 
             <TextInput
                 required
                 source="email"
                 type="email"
+                label="Correo"
             />
 
             <TextInput
                 required
                 source="body"
+                label="Cuerpo"
                 multiline
                 rows={5}
             />
@@ -68,18 +72,20 @@ export const CommentCreate = () => (
                 <SelectInput optionText="title" />
             </ReferenceInput>
 
-            <TextInput required source="name" />
+            <TextInput required source="name" label="Nombre" />
 
             <TextInput
                 required
                 source="email"
                 type="email"
+                label="Correo"
             />
 
             <TextInput
                 required
                 source="body"
                 multiline
+                label="Cuerpo"
                 rows={5}
             />
         </SimpleForm>

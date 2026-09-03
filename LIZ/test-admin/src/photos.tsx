@@ -10,17 +10,19 @@ export const PhotoList = () =>{
         <List>
             {isSmall ? (
                 <SimpleList
-                    primaryText = {(record) => record.userId}
+                    primaryText = {(record) => record.albumId}
                     secondaryText = {(record) => record.title}
                 />
                 ) : (
                     <DataTable>
-                        <DataTable.Col source="albumId" />
-                        <DataTable.Col source="id" />
-                        <DataTable.Col source="title" />
-                        <DataTable.Col source="url" />
-                        <DataTable.Col source="thumbnailUrl">
-                            <ImageField source="url" />
+                        <DataTable.Col source="albumId" label="album">
+                            <ReferenceField source="albumId" reference="albums" link="show"/>
+                        </DataTable.Col>
+                        <DataTable.Col source="id" label="ID"/>
+                        <DataTable.Col source="title" label="Título"/>
+                        <DataTable.Col source="url" label="URL"/>
+                        <DataTable.Col source="thumbnailUrl" label="Imagen">
+                            <ImageField source="thumbnailUrl" />
                         </DataTable.Col>
                         <DataTable.Col>
                             <EditButton />
@@ -40,16 +42,20 @@ export const PhotoEdit = () =>(
             <ReferenceInput source="albumId" reference="albums">
                 <SelectInput optionText="title" />
             </ReferenceInput>
-        
+    
+        <TextInput required source="title" label="Título"/>
+
         <TextInput
             required
             source="url"
             type="url"
+            label="URL"
         />
         
         <TextInput
             required
             source="thumbnailUrl"
+            label="Imagen"
             multiline
             rows={5}
         />
@@ -63,7 +69,23 @@ export const PhotoCreate = () =>(
             <ReferenceInput required source="albumId" reference="albums">
                 <SelectInput optionText="title" />
             </ReferenceInput>
-    
+
+            <TextInput required source="title" label="Título"/>
+
+            <TextInput
+                required
+                source="url"
+                type="url"
+                label="URL"
+            />
+
+            <TextInput
+                required
+                source="thumbnailUrl"
+                label="Imagen"
+                multiline
+                rows={5}
+            />
         </SimpleForm>
     </Create>
 );

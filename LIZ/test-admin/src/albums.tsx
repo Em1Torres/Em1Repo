@@ -14,11 +14,11 @@ export const AlbumList = () =>{
                 />
                 ) : (
                     <DataTable>
-                        <DataTable.Col source="userId" >
+                        <DataTable.Col source="userId" label="usuario">
                             <ReferenceField source="userId" reference="users" link="show"/> 
                         </DataTable.Col>
-                        <DataTable.Col source="id" />
-                        <DataTable.Col source="title" />
+                        <DataTable.Col source="id" label="ID"/>
+                        <DataTable.Col source="title" label="Título"/>
                         <DataTable.Col>
                             <EditButton />
                         </DataTable.Col>
@@ -35,7 +35,7 @@ export const AlbumEdit = () =>(
         <SimpleForm warnWhenUnsavedChanges>
             <TextInput disabled source="id" />
             <ReferenceInput source="userId" reference="users" />
-            <TextInput required source="title" />
+            <TextInput required source="title" label="Título"/>
         </SimpleForm>
     </Edit>
 );
@@ -44,7 +44,7 @@ export const AlbumCreate = () =>(
     <Create>
         <SimpleForm>
             <ReferenceInput required source="userId" reference="users" />
-            <TextInput required source="title" />
+            <TextInput required source="title" label="Título"/>
         </SimpleForm>
     </Create>
 );
