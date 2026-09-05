@@ -1,0 +1,103 @@
+We're gonna build our graph by recieving edges inside a vector of vectors 
+that will have its values stored after reading a .txt file recived as 
+input in main:
+
+vector<vector<int>> edges;
+
+Then we proceed to sort our outter vector based on vector[i][2],
+this way ensuring the positions are sorted based on weight.
+
+BubbleSort(vector<vector<int>> edges):
+    swap_check;
+    n = edges.size;
+    for(i = 0; i < n; i++){
+        swap_check = false;
+        for(j=0;j<n-1;j++){
+            if(edges[j][2] > edges[j+1][2]){
+                swap(edges[j] AND edges[j+1])
+                swap_check = true;
+            }   
+        }       
+    }
+    if(~swap_check)
+        break;
+        
+Finding connections:
+
+- First of all, we create a class UnionFind which was an investigated part of the algorithm
+to help us determine if a node has been pass through already or not. It back tracks the
+graph taking two nodes and if they´re roots are equal that means they´re connected if not, it
+joins it
+
+class UnionFind{
+private:
+    vector<int> parents;
+public:
+    Constructor(n){
+        for(i=0;i<n;i++):
+            parents.push_back(i);
+    }
+    find(x){
+        while(parents[x] != x){
+            x = parents[x];
+        }
+        return x;
+    }
+    unite(n1, n2){
+        root1 = find(n1);
+        root2 = find(n2);
+
+        if(root1 == root2){
+            return false; // The nodes are already connected so doesnt unite
+        }
+
+        parents[root2] = root1;
+        return true;
+    }
+
+};
+
+Then we create a function to determine the amount of different nodes in our graph
+since the UnionFind recives input of how many different nodes inside the graph.
+The idea of this is use find() in c++ to determine if theres already a number
+in our array of nodes to give to UnionFidn:
+
+Count_Nodes(vector<vector<int>> edges){
+    vector<int> Nodes;
+    for(i=0;i<Nodes.size;i++){
+        if(find(Nodes.begin,Nodes.end,edges[i][0]) == Nodes.end){
+            Nodes.push_back(edges[i][0])
+        }  //In code we repeat this if statement for second position of the vector of vectors 
+        // since the edges are given this way: { {u1, v1, w1}, {u2, v2, w2}}
+    }
+} 
+
+Then we call this count_nodes function inside our selector of edges functions,
+that will create a UnionFind object using the size of the array Nodes.
+Then we iterate our edges array and call the method unite to determine if nodes have been connected
+or not, if it does appends it if not jumps it:
+
+Select_Edges(vector<vector<int>> edges){
+    vector<vector<int>> new_edges;
+    current = 0;
+    vector<int> nodes = Count_Nodes(edges);
+    UnionFind mG(nodes.size);
+    for(i=0;i<nodes.size;i++){
+        n1 = edges[i][0]
+        n2= edges[i][1]
+        if(mG.unite(n1,n2)){
+            new_edges.push_back(edges[i]);
+        }
+    }
+}
+
+Main:
+We read the .txt file using ifstream and it store it inside a vector<vector<int>> edges:
+
+Bubble_Sort(edges);
+vector<vector<int>> selectedEdges = Select_Edges(edges);
+
+weight=0;
+for(i=0;i<selectedEdges.size;i++){
+    print("The edge: " + list[i][0] + "to" + list[i][1] + "has weight: + "list[i][2]");
+}

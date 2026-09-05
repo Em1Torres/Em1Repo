@@ -3,8 +3,8 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <string>
 #include <algorithm>
-#include "doubleLL.h"
 using namespace std;
 
 void Bubble_Sort(vector<vector<int>> &unsorted) {
@@ -22,100 +22,98 @@ void Bubble_Sort(vector<vector<int>> &unsorted) {
             break;
         }
     }
+
 }
 
-class Group{
-public:
-    int root;
-    vector <int> members;
-}; 
-
-class DSJ{
+class UnionFind {
 private:
-    vector<Group> groups;
-    vector<int> node2Group;
+    vector<int> parents;
 public:
-    DSJ(int n){
-        for(int i = 0; i < n; i++){
-            groups[i].root = i;
-            groups[i].members.push_back(i);
-            node2Group.push_back(i);
+    UnionFind(int n) {
+        for (int i = 0; i < n; i++) {
+            parents.push_back(i); //creates the vector
         }
     }
-    int find(int node){
-        return groups[node2Group[node]].root;
-    }
-    bool join(int n1, int n2){
-        int group_n1 = node2Group[n1];
-        int group_n2 = node2Group[n2];
 
-        if(group_n1 == group_n2)
-            return false;
-        
-        if(groups[group_n1].members.size() < groups[group_n2].members.size()){
-            int temp = group_n2;
-            group_n2 = group_n1;
-            group_n1 = temp;
+    int find(int x) {
+        while (parents[x] != x) {/*parents is a vector in which we store which node is the parent of which node, so this goes down the list
+            looking until the parent of the number is the number itself, which is when we reach the root*/
+            x = parents[x];
         }
-            
-        
+        return x;
     }
-    
+
+    bool unite(int a, int b) {
+        int root1 = find(a); //check for the root of both numbers
+        int root2 = find(b);
+
+        if (root1 == root2) {
+            return false;
+        }
+
+        parents[root2] = root1; //if they have different roots, make the root of the second node into a child of the root of the first node
+        return true;
+    }
 };
 
-// void Select_Edges(vector<vector<int>> &Possible_Edges) {
-//     vector <int> Nodes;
-//     vector <vector<int>> Selected_Edges;
-//     map <int, vector<int>> MyGraph;
-//     int counter = 0;
-//     for (int i = 0; i < Possible_Edges.size(); i++) {
-//         if (find(Nodes.begin(), Nodes.end(), Possible_Edges[i][0]) != Nodes.end()) {
-//             break;
-//         }
-//         else {
-//             Nodes.push_back(Possible_Edges[i][0]);
-//             cout << "The node: " << Possible_Edges[i][0] << " has been added to the vector" << endl;
-//         }
-//         if (find(Nodes.begin(), Nodes.end(), Possible_Edges[i][1]) != Nodes.end()) {
-//             break;
-//         }
-//         else {
-//             Nodes.push_back(Possible_Edges[i][1]);
-//             cout << "The node: " << Possible_Edges[i][1] << " has been added to the vector" << endl;
-//         }
 
-//     }
+vector <int> Count_Nodes(vector<vector<int>> Possible_Edges) {
+    /*This counts the amount of different nodes there are in the graph. It is needed to initiate the Union Find since it works like an
+    array. This tells it how many slots it will need*/
+    vector <int> Nodes;
+    for (int i = 0; i < Possible_Edges.size(); i++) {
+        if (find(Nodes.begin(), Nodes.end(), Possible_Edges[i][0]) == Nodes.end()) {/* If find does not find what you are looking for then it
+            sends as a result the closing parameter. If it sends anything else that means it found what it was looking for. This is why
+            we use == Nodes.end(). If the result is positive it means the node is not in the vector.*/
+            Nodes.push_back(Possible_Edges[i][0]);
+            cout << "The node: " << Possible_Edges[i][0] << " has been added to the vector" << endl;
+        }
+        if (find(Nodes.begin(), Nodes.end(), Possible_Edges[i][1]) == Nodes.end()) {
+            Nodes.push_back(Possible_Edges[i][1]);
+            cout << "The node: " << Possible_Edges[i][1] << " has been added to the vector" << endl;
+        }
+    }
+    return Nodes;
+}
+
+vector<vector<int>> Select_Edges(const vector<vector<int>>& Possible_Edges) {
+    vector<vector<int>> list_of_Edges;
+    int current_index = 0;
+
+    vector<int> number_nodes = Count_Nodes(Possible_Edges); //Here is where the previous function is used
+
+    map<int, int> indexes; /*If the nodes are already little numbers like 1, 2, 3...8 then this is unnecesary, but if they are letters
+    the function would break since unite requires integers
     
-//     while (Selected_Edges.size() < Nodes.size() - 1) {
-//         bool existing_number = false;
-//         if (MyGraph.find(Possible_Edges[counter][1]) != MyGraph.end()) {
+    This creates a map, which works like a dictionary in python. Since we were originally going to build this using a map, we thought of using
+    it to fix this possible error. This way what you send to the unite function is not, for example 'a' but the index associated to 'a'
+    in the parents vector*/
+    for (int i = 0; i < number_nodes.size(); i++) {
+        indexes[number_nodes[i]] = i;
+    }
 
-//         }
-//         else {
-//             if (MyGraph.find(Possible_Edges[counter][0]) != MyGraph.end()) {
-//                 MyGraph[Possible_Edges[counter][0]].push_back(Possible_Edges[counter][1]);
-//                 vector <int> Connected_Numbers2 = { Possible_Edges[counter][0] };
-//                 MyGraph.insert(pair<int, vector<int>>(Possible_Edges[counter][1], Connected_Numbers2));
-//                 existing_number = true;
-//             }
-//             if (existing_number)
-//                 break;
+    UnionFind my_Graph(number_nodes.size()); // create the UnioFind object
 
-//             vector <int> Connected_Numbers1 = { Possible_Edges[counter][1] };
-//             vector <int> Connected_Numbers2 = { Possible_Edges[counter][0] };
+    for (int i = 0; i < Possible_Edges.size();i++) {
+        int node1_index = indexes[Possible_Edges[i][0]]; /*a bit confusing but it is what was explained earlier. 
+        Instead of using the name of the node we use the index*/
+        int node2_index = indexes[Possible_Edges[i][1]];
 
-//             MyGraph.insert(pair<int, vector<int>>(Possible_Edges[counter][0], Connected_Numbers1));
-//             MyGraph.insert(pair<int, vector<int>>(Possible_Edges[counter][1], Connected_Numbers2));
-//         }
-//     }
-// }
+        if (my_Graph.unite(node1_index, node2_index)) {
+            list_of_Edges.push_back(Possible_Edges[i]);
+        }
+    }
+    
+    return list_of_Edges;
+}
 
 int main() {
     string line;
     vector<vector<int>> edges;
 
-    ifstream f("C:/Users/alex_/Em1Repo/dataStructure2/exercises/Kruskal_tester.txt");
-    while (getline(f, line)) {
+    ifstream f("C:/Users/alex_/Em1Repo/dataStructure2/exercises/Kruskal_tester.txt"); //reads the file
+    while (getline(f, line)) { /*separates the file into lines and the next lines of code break it down into Node1, Node2 and Weight 
+        then pushes it back into the array*/
         stringstream ss(line);
         vector<int> temp;
         string placeholder;
@@ -126,12 +124,13 @@ int main() {
     } 
 
     Bubble_Sort(edges);
-    //Select_Edges(edges);
+    vector<vector<int>> list_of_Edges = Select_Edges(edges);
 
-    cout << "The edges (by weight) in ascending order are: " << endl;
-    for(int i = 0;  i < edges.size(); i++)
-        cout << edges[i][2] << " ";
-    cout << endl;
-
+    int total_weight = 0;
+    for (int i = 0; i < list_of_Edges.size(); i++) {
+        cout << "The Edge: " << list_of_Edges[i][0] << " to: " << list_of_Edges[i][1] << " with the weight: " << list_of_Edges[i][2] << " was selected\n";
+        total_weight += list_of_Edges[i][2];
+    }
+    cout << "The total weight is: " << total_weight << endl;
     return 0;
 }
