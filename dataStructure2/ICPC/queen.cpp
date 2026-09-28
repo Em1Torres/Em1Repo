@@ -3,7 +3,6 @@
     using namespace std;
 
     vector<vector<int>> noKillQueensPos(int datasets, vector<vector<int>> initPos){
-        
         for(int i=0;i<datasets;i++){
             vector<vector<int>> board(8, vector<int>(8));
             
