@@ -13,8 +13,10 @@ vector<string> suffix_list(string s){
             temp=temp+s[j];
             j++;
         }
+        cout << temp << endl;
         suffixes.push_back(temp);
     }
+    cout << endl;
     return suffixes;
 }
 void Bubble_Sort(vector<string> &unsorted) {
@@ -34,10 +36,10 @@ void Bubble_Sort(vector<string> &unsorted) {
     }
 }
 int main(){
-    string x = "ababcabcabababd";
+    string x = "abcab";
     vector<string> mySuffixes = suffix_list(x);
     Bubble_Sort(mySuffixes);
     for(int i=0;i<mySuffixes.size();i++)
-        cout << mySuffixes[i] << "  Suffix-> " << x.size()+1 - mySuffixes[i].size() << endl;
+        cout << mySuffixes[i] << "  Suffix-> " << x.size()+1 - mySuffixes[i].size()+1 << endl;
     return 0;
 }
