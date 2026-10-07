@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#define pi 3.1416
+//#define pi 3.1416
 using namespace std;
 
 vector<int> pattern_indexes(string s, string pattern){
@@ -18,15 +18,19 @@ vector<int> pattern_indexes(string s, string pattern){
     }
     return indexes;
 }
-
-int main() {
-    string myStr = "aaaaaaaaaabaaaaaaaaa";
-    string myPattern = "aaaab";
-    vector<int> myIndexes = pattern_indexes(myStr, myPattern);
+vector<int> zFunction(string str, string pattern){
+    vector<int> myIndexes = pattern_indexes(str, pattern);
     cout << "The pattern is found: " << myIndexes.size() << " times" << endl;
     for(int i=0;i<myIndexes.size();i++){
-        cout << "Pattern start at index: " << myIndexes[i] << " and ends at: " << myIndexes[i]+myPattern.size()-1<< endl;
+        cout << "Pattern start at index: " << myIndexes[i] << " and ends at: " << myIndexes[i]+pattern.size()-1<< endl;
     }
-    cout << pi << endl;
-    return 0;
+    return myIndexes;
 }
+
+// int main() {
+//     string myStr = "aaaaaaaaaabaaaaaaaaa";
+//     string myPattern = "aaaab";
+    
+//     // cout << pi << endl;
+//     return 0;
+// }

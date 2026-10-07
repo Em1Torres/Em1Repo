@@ -37,12 +37,11 @@ vector<int> noMoneyValues(vector<int> final_values){
     int first=final_values[0]-final_values[1];
     int last=final_values[0]+final_values[1];
     for(int i=first+1;i<=last;i=i+2){
-        actual_positions.push_back(i);
+        actual_positions.push_back(i/2);
     }
     return actual_positions;
 }
-int main(){
-    string x = "abdcbcdab";
+vector<int> manacher(string x){
     string new_x = money_adder(x);
     vector<int> fv = longestPattern(new_x);
     vector<int> nMoneyv = noMoneyValues(fv);
@@ -50,5 +49,11 @@ int main(){
     for(int i = 0; i < nMoneyv.size(); i++)
         cout << new_x[nMoneyv[i]];
     cout << endl;
-    return 0;
+    return nMoneyv;
 }
+// int main(){
+//     //Aquí ees archivos
+//     string x = "abdcbcdab";
+//     manacher(x);
+//     return 0;
+// }
