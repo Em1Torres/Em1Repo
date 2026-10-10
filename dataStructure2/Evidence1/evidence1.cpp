@@ -3,7 +3,7 @@
 #include "manacher.h"
 #include <fstream>
 using namespace std;
-
+//Function to read starting .txt files
 string readTxTFiles(string path){
 	string line;
 	string wholeText;
@@ -14,14 +14,14 @@ string readTxTFiles(string path){
 	f.close();
 	return wholeText;
 }
-
+//class for Part 1.
 class TransmissionResults{
-public:
+protected:
 	string transmission;
 	vector <bool> contains;
-	vector <vector<int>> indexes;
+	// vector <vector<int>> indexes;
 	vector <string> mcodes;
-private:
+public:
 	TransmissionResults(string transmission){
 		this->transmission=transmission;
 	}
@@ -32,14 +32,13 @@ private:
 		for(int i=0;i<mcodes.size();i++){
 			vector<int> idx = pattern_indexes(transmission,mcodes[i]);
 			contains.push_back(!idx.empty());
-			if(contains[i]){
-				for(int j=0;j<idx.size();j++){
-					indexes[i].push_back(idx[j]);
-				}
-			}
 		}	
 	}
-
+	void checkMaliciousCode(){  // metodo para la parte 2
+		vector<int> malicious = manacher(transmission);
+		cout << malicious[0];
+		cout << " " << malicious.back() << endl;
+	}
 	void printResults(){
 		for(int i=0;i<mcodes.size();i++){
 			cout << "(" << contains[i] << ")";
@@ -47,11 +46,7 @@ private:
 				cout << " transmission doens't contains any sequence inside mcode " << i << endl; 
 			}
 			else{
-				cout << " transmission contains indexes: ";
-				for(int j=0;j<indexes[i].size();j++){
-					cout << indexes[i][j] << " ";
-				}
-				cout << "from mcode " << i+1 << endl;
+				cout << " transmission contains sequence inside mcode " << i << endl;
 			}
 		}
 	}
@@ -67,6 +62,16 @@ int main() {
 	mcodes.push_back(readTxTFiles("C:/Users/alex_/Em1Repo/dataStructure2/Evidence1/pattern2.txt"));
 	mcodes.push_back(readTxTFiles("C:/Users/alex_/Em1Repo/dataStructure2/Evidence1/pattern3.txt"));
 
-
+	//Part 1.
+	for(int i=0;i<wholeTexts.size();i++){
+		TransmissionResults tr(wholeTexts[i]);
+		for(int j=0;i<mcodes.size();j++)
+			tr.getMcodes(mcodes[i]);
+		tr.check();
+		tr.printResults();
+		//Part 2.
+		cout << endl;
+		tr.checkMaliciousCode();
+	}
 	return 0;
 }

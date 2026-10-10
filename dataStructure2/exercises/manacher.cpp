@@ -45,10 +45,10 @@ vector<int> manacher(string x){
     string new_x = money_adder(x);
     vector<int> fv = longestPattern(new_x);
     vector<int> nMoneyv = noMoneyValues(fv);
-    cout << "The string starts in the index: " << nMoneyv[0] << endl;
-    for(int i = 0; i < nMoneyv.size(); i++)
-        cout << new_x[nMoneyv[i]];
-    cout << endl;
+    // cout << "The string starts in the index: " << nMoneyv[0] << endl;
+    // for(int i = 0; i < nMoneyv.size(); i++)
+    //     cout << new_x[nMoneyv[i]];
+    // cout << endl;
     return nMoneyv;
 }
 // int main(){
