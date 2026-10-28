@@ -5,7 +5,7 @@
 
 **Ahmdal's Law**
 
-1 / (s + ((1-s/n))) -> speedup de un código
+1 / (s + p/c) -> speedup de un código
 Mientras menos partes seriales del código, más speedup tendremos
 
 Ej: Un porgrama serial 100% toma 5 horas, que pasaría si fuera 30% serial con 8 cores
